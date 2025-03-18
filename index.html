@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Transcritor de Áudio - Whisper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #upload-container {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        #file-input {
+            display: none;
+        }
+        #file-label {
+            cursor: pointer;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #resultado {
+            margin-top: 20px;
+            text-align: left;
+            border: 1px solid #ccc;
+            padding: 15px;
+            min-height: 100px;
+        }
+        #btn-download {
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transcritor de Áudio com Whisper</h1>
+    
+    <div id="upload-container">
+        <input type="file" id="file-input" accept="audio/*">
+        <label for="file-input" id="file-label">
+            Clique ou arraste seu arquivo de áudio aqui
+        </label>
+    </div>
+
+    <div>
+        <select id="idioma">
+            <option value="pt">Português</option>
+            <option value="en">Inglês</option>
+            <option value="es">Espanhol</option>
+            <option value="fr">Francês</option>
+        </select>
+        <select id="modelo">
+            <option value="base">Base</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+        </select>
+    </div>
+
+    <button id="btn-transcrever">Transcrever Áudio</button>
+
+    <div id="resultado">
+        Resultado da transcrição aparecerá aqui...
+    </div>
+
+    <button id="btn-download">Baixar Transcrição (.txt)</button>
+
+    <script>
+        // Lógica JavaScript para processamento do áudio
+        document.getElementById('btn-transcrever').addEventListener('click', async () => {
+            const fileInput = document.getElementById('file-input');
+            const resultadoDiv = document.getElementById('resultado');
+            const downloadBtn = document.getElementById('btn-download');
+            const idioma = document.getElementById('idioma').value;
+            const modelo = document.getElementById('modelo').value;
+
+            if (fileInput.files.length === 0) {
+                alert('Por favor, selecione um arquivo de áudio');
+                return;
+            }
+
+            const arquivo = fileInput.files[0];
+            
+            // Simulação de transcrição 
+            // Na implementação real, você usaria a biblioteca Whisper
+            try {
+                // Processamento fictício do áudio
+                resultadoDiv.innerHTML = `Transcrevendo ${arquivo.name}...\n\n`;
+                
+                // Simulação de transcrição
+                resultadoDiv.innerHTML += `[Transcrição no idioma ${idioma.toUpperCase()} usando modelo ${modelo}]\n\n`;
+                resultadoDiv.innerHTML += "Aqui estaria o texto transcrito do áudio. Na implementação real, usaríamos a biblioteca Whisper da OpenAI para processamento preciso.";
+
+                downloadBtn.style.display = 'block';
+            } catch (erro) {
+                resultadoDiv.innerHTML = `Erro na transcrição: ${erro.message}`;
+            }
+        });
+
+        // Botão de download
+        document.getElementById('btn-download').addEventListener('click', () => {
+            const texto = document.getElementById('resultado').innerText;
+            const blob = new Blob([texto], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'transcricao.txt';
+            link.click();
+        });
+
+        // Arrastar e soltar arquivo
+        const dropContainer = document.getElementById('upload-container');
+        dropContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropContainer.style.backgroundColor = '#f0f0f0';
+        });
+
+        dropContainer.addEventListener('dragleave', () => {
+            dropContainer.style.backgroundColor = 'transparent';
+        });
+
+        dropContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropContainer.style.backgroundColor = 'transparent';
+            
+            const files = e.dataTransfer.files;
+            document.getElementById('file-input').files = files;
+        });
+    </script>
+</body>
+</html>
